@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useAddNewProjectMutation } from "../../Redux/Features/Projects/projectApi";
 
 const AddNewProject = () => {
-    const [addNewProject] = useAddNewProjectMutation();
+    const [addNewProject, { isLoading }] = useAddNewProjectMutation();
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
@@ -192,16 +192,16 @@ const AddNewProject = () => {
                     </div>
                 </div>
 
-                 {/* Live link */}
-                 <div className="flex-1">
-                        <label className="text-white mb-2 block">Live Project Link</label>
-                        <input
-                            {...register("liveLink")}
-                            placeholder="Live project link"
-                            type="text"
-                            className="outline-none bg-[#0E1330] border border-[#282D45] rounded-[10px] py-3 px-5 w-full text-white focus:border-[#0696E7]/50 transition duration-300 "
-                        />
-                    </div>
+                {/* Live link */}
+                <div className="flex-1">
+                    <label className="text-white mb-2 block">Live Project Link</label>
+                    <input
+                        {...register("liveLink")}
+                        placeholder="Live project link"
+                        type="text"
+                        className="outline-none bg-[#0E1330] border border-[#282D45] rounded-[10px] py-3 px-5 w-full text-white focus:border-[#0696E7]/50 transition duration-300 "
+                    />
+                </div>
 
 
                 <div className="flex gap-4 w-full">
@@ -329,14 +329,16 @@ const AddNewProject = () => {
                 </div>
 
                 <div className="flex justify-end">
-                <Ripples during={1500}>
-                    <button
-                        type="submit"
-                        className="w-full md:w-[190px] bg-gradient-to-br from-blue-500 to-indigo-800 font-Poppins py-3 px-5 text-xs sm:text-base text-white rounded sm:rounded-[7px] flex justify-center items-center"
-                    >
-                        Submit
-                    </button>
-                </Ripples>
+                    <Ripples during={1500} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                        <button
+                            type="submit"
+                            className="w-full md:w-[190px] bg-gradient-to-br from-blue-500 to-indigo-800 font-Poppins py-3 px-5 text-xs sm:text-base text-white rounded sm:rounded-[7px] flex justify-center items-center"
+                        >
+                            {
+                                isLoading ? "Loading..." : "Submit"
+                            }
+                        </button>
+                    </Ripples>
                 </div>
             </form>
         </div>
