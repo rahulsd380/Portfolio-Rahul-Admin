@@ -7,6 +7,7 @@ import Endorsments from "../Pages/Endorsments/Endorsments";
 import ProfessionalSkills from "../Pages/ProfessionalSkills/ProfessionalSkills";
 import Projects from "../Pages/Projects/Projects";
 import Achievements from "../Pages/Achievements/Achievements";
+import AddNewProject from "../Pages/Projects/AddNewProject";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "/projects",
         element: <Projects />,
+      },
+      {
+        path: "/add-new-project",
+        element: <AddNewProject />,
       },
       {
         path: "/my-services",

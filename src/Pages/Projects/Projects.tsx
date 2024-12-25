@@ -48,7 +48,7 @@ const Projects = () => {
                         )
                     }
                     <Ripples placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                        <Link to={"/rahul-sutradhar/admin/dashboard/add-new-project"}
+                        <Link to={"/add-new-project"}
                             className="bg-[#1C2242] border border-[#282D45] p-3 rounded-lg text-[#aeb9e1]">
                             Add New Project
                         </Link>

@@ -13,8 +13,8 @@ const ProjectCard = ({ project }) => {
   const dropDownRef = useRef(null);
 
   const items = [
-    { label: "View Details", path: `/project-details/${_id}`, icon: details },
-    { label: "See Live Link", path: liveLink, icon: link },
+    { label: "View Details", path: `/project-details/${_id}`, icon: ICONS.details },
+    { label: "See Live Link", path: liveLink, icon: ICONS.link },
   ];
 
   const toggleDropdown = (index) => {
