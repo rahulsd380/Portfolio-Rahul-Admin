@@ -11,35 +11,35 @@ import { useGetAllSkillsQuery } from "../../Redux/Features/Skills/skillApi";
 
 
 const Dashboard = () => {
-    const {data:achievements} = useGetAllAchievementQuery({});
-    const { data:endorsements } = useGetAllEndorsementsQuery({});
-    const { data:projects } = useGetAllProjectsQuery({});
-    const { data:skills } = useGetAllSkillsQuery({});
+    const { data: achievements } = useGetAllAchievementQuery({});
+    const { data: endorsements } = useGetAllEndorsementsQuery({});
+    const { data: projects } = useGetAllProjectsQuery({});
+    const { data: skills } = useGetAllSkillsQuery({});
 
     const personalProjects = projects?.data?.filter(
-        (project:any) => project.projectType === "Personal"
+        (project: any) => project.projectType === "Personal"
     );
     const companyProjects = projects?.data?.filter(
-        (project:any) => project.projectType === "Company"
+        (project: any) => project.projectType === "Company"
     );
     const statusCardsInfo = [
         {
             title: "Total Projects",
             value: projects?.data?.length || 0,
             icon: <FaRegFileAlt className="text-[#AEB9E1] text-xl" />,
-            path : "/projects"
+            path: "/projects"
         },
         {
             title: "Personal Projects",
             value: personalProjects?.length || 0,
             icon: <FaUser className="text-[#AEB9E1] text-xl" />,
-            path : "/projects"
+            path: "/projects"
         },
         {
             title: "Company Projects",
             value: companyProjects?.length || 0,
             icon: <FaBuildingColumns className="text-[#AEB9E1] text-xl" />,
-            path : "/projects"
+            path: "/projects"
         },
         // {
         //     title : "Total Services",
@@ -50,19 +50,19 @@ const Dashboard = () => {
             title: "Professional Skills",
             value: skills?.data?.length || 0,
             icon: <FaClipboardList className="text-[#AEB9E1] text-xl" />,
-            path : "/professional-skills"
+            path: "/professional-skills"
         },
         {
             title: "Achievements",
             value: achievements?.data?.length || 0,
             icon: <FaAward className="text-[#AEB9E1] text-xl" />,
-            path : "/achievements"
+            path: "/achievements"
         },
         {
             title: "Total Endorsements",
             value: endorsements?.data?.length || 0,
             icon: <FaAward className="text-[#AEB9E1] text-xl" />,
-            path : "/endorsements"
+            path: "/endorsements"
         },
     ]
     return (
