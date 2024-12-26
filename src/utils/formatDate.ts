@@ -1,4 +1,5 @@
-function formatDate(dateString) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function formatDate(dateString:string) {
     const date = new Date(dateString);
 
     const day = date.getDate();
@@ -6,7 +7,7 @@ function formatDate(dateString) {
     const year = date.getFullYear();
 
     // Helper function to get the ordinal suffix
-    function getOrdinalSuffix(day) {
+    function getOrdinalSuffix(day:any) {
       if (day > 3 && day < 21) return 'th';
       switch (day % 10) {
         case 1: return 'st';

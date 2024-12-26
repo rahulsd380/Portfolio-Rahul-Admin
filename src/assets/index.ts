@@ -8,6 +8,7 @@ import view from "../assets/Icons/view.svg";
 import details from "../assets/Icons/details.svg";
 import link from "../assets/Icons/link.svg";
 import github from "../assets/Icons/github.svg";
+import rightArrow from "../assets/Icons/right-arrow (2).svg";
 
 import aboutMe from "../assets/Images/about me.png";
 
@@ -22,6 +23,7 @@ export const ICONS = {
     details,
     link,
     github,
+    rightArrow,
 
 };
 

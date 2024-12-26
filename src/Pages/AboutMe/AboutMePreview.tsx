@@ -37,7 +37,7 @@ const AboutMePreview = () => {
           </p>
 
           <div className="flex items-center relative">
-            <Ripples during={1500}>
+            <Ripples during={1500} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
               <a
                 href="/src/assets/Resume_of_Rahul Sutradhar.pdf"
                 download

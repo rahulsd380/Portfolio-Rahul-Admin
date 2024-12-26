@@ -8,45 +8,58 @@ import ProfessionalSkills from "../Pages/ProfessionalSkills/ProfessionalSkills";
 import Projects from "../Pages/Projects/Projects";
 import Achievements from "../Pages/Achievements/Achievements";
 import AddNewProject from "../Pages/Projects/AddNewProject";
+import AuthLayout from "../Layout/AuthLayout";
+import Verify from "../Pages/Verify/Verify";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: <AuthLayout />,
+    // errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: "/",
+        element: <Verify />,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
     element: <Layout />,
     // errorElement: <NotFoundPage />,
     children: [
       {
-        path: "",
+        path: "my-dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/about-me",
+        path: "about-me",
         element: <AboutMe />,
       },
       {
-        path: "/projects",
+        path: "projects",
         element: <Projects />,
       },
       {
-        path: "/add-new-project",
+        path: "add-new-project",
         element: <AddNewProject />,
       },
       {
-        path: "/my-services",
+        path: "my-services",
         element: <MyServices />,
       },
       {
-        path: "/endorsements",
+        path: "endorsements",
         element: <Endorsments />,
       },
       {
-        path: "/professional-skills",
+        path: "professional-skills",
         element: <ProfessionalSkills />,
       },
       {
-        path: "/achievements",
+        path: "achievements",
         element: <Achievements />,
       },
     ],
-  }
+  },
 ]);

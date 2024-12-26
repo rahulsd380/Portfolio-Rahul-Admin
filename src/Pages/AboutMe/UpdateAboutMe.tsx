@@ -1,15 +1,21 @@
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import Ripples from "react-ripples";
 import { IMAGES } from "../../assets";
+
+interface FormValues {
+  title: string;
+  description: string;
+  image?: FileList;
+}
 
 const UpdateAboutMe = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     const postedAt = new Date().toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
@@ -18,7 +24,6 @@ const UpdateAboutMe = () => {
     const formData = { ...data, postedAt };
     console.log(formData);
   };
-
 
   return (
     <div>
@@ -63,7 +68,7 @@ const UpdateAboutMe = () => {
             />
           </div>
 
-          <Ripples during={1500}>
+          <Ripples during={1500} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
             <button
               type="submit"
               className="w-full md:w-[190px] bg-gradient-to-br from-blue-500 to-indigo-800 font-Poppins py-3 px-5 text-xs sm:text-base text-white rounded sm:rounded-[7px] flex justify-center items-center"
@@ -72,17 +77,6 @@ const UpdateAboutMe = () => {
             </button>
           </Ripples>
         </div>
-
-        {/* <div className="flex justify-center md:justify-end">
-        <Ripples during={1500}>
-          <button
-            type="submit"
-            className="w-full md:w-[190px] bg-gradient-to-br from-blue-500 to-indigo-800 font-Poppins py-3 px-5 text-xs sm:text-base text-white rounded sm:rounded-[7px] flex justify-center items-center"
-          >
-            Submit
-          </button>
-        </Ripples>
-      </div> */}
       </form>
     </div>
   );

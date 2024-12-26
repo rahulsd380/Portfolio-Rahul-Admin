@@ -1,60 +1,75 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import Ripples from 'react-ripples';
+import Ripples from "react-ripples";
 import { useAddNewAchievementMutation, useGetAllAchievementQuery } from "../../Redux/Features/Achievements/achievementsApi";
 import AchievementCard from "./AchievementCard";
 import { ICONS } from "../../assets";
 
+// Define types for the form data
+interface AchievementFormData {
+    name: string;
+    organization: string;
+    completedAt: string;
+    image?: FileList;
+}
+
+// Define types for achievement data from the API
+interface AchievementData {
+    title: string;
+    description: string;
+    image?: string;
+}
 
 const Achievements = () => {
     const [addNewAchievement] = useAddNewAchievementMutation();
-    const {data} = useGetAllAchievementQuery({});
-    const [uploadedImage, setUploadedImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const { data } = useGetAllAchievementQuery({});
+    const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isFormVisible, setIsFormVisible] = useState(false);
+
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm<AchievementFormData>();
 
     const toggleFormVisibility = () => {
         setIsFormVisible((prev) => !prev);
     };
 
-    const handleAddNewAchievement = (data) => {
+    const handleAddNewAchievement: SubmitHandler<AchievementFormData> = (data) => {
         const formData = new FormData();
         const achievementData = {
             name: data.name,
             organization: data.organization,
-            completedAt: data.completedAt
-        }
+            completedAt: data.completedAt,
+        };
         formData.append("data", JSON.stringify(achievementData));
-        formData.append("file", uploadedImage);
+        if (uploadedImage) formData.append("file", uploadedImage);
 
         toast.promise(
             addNewAchievement(formData).unwrap(),
             {
-                loading: 'Loading...',
+                loading: "Loading...",
                 success: (response) => {
-                    return response?.message || 'Certificate added successfully!';
+                    return response?.message || "Certificate added successfully!";
                 },
                 error: (err) => {
-                    console.error('Error:', err);
-                    return 'Failed to add Certificate...';
+                    console.error("Error:", err);
+                    return "Failed to add Certificate...";
                 },
             }
         );
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
         if (file) {
             setUploadedImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImagePreview(() => [reader.result]);
+                setImagePreview(() => reader.result as string);
             };
             reader.readAsDataURL(file);
         }
@@ -62,7 +77,9 @@ const Achievements = () => {
 
     const handleImageRemove = () => {
         setUploadedImage(null);
+        setImagePreview(null);
     };
+
     return (
         <div>
             {/* Header */}
@@ -79,7 +96,6 @@ const Achievements = () => {
                     </button>
                 </Ripples>
             </div>
-
 
             <form
                 onSubmit={handleSubmit(handleAddNewAchievement)}
@@ -117,7 +133,7 @@ const Achievements = () => {
                     {uploadedImage ? (
                         <div className="relative size-20">
                             <img
-                                src={imagePreview}
+                                src={imagePreview || ""}
                                 alt="Service Icon"
                                 className="w-full h-full rounded-lg object-cover"
                             />
@@ -153,7 +169,7 @@ const Achievements = () => {
                         </div>
                     )}
 
-                    <Ripples during={1500}>
+                    <Ripples during={1500} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                         <button
                             type="submit"
                             className="w-full md:w-[190px] bg-gradient-to-br from-blue-500 to-indigo-800 font-Poppins py-3 px-5 text-xs sm:text-base text-white rounded sm:rounded-[7px] flex justify-center items-center"
@@ -164,13 +180,12 @@ const Achievements = () => {
                 </div>
             </form>
 
-
-            {/* All achievents cards */}
+            {/* All achievements cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-11 mt-4">
-      {data?.data?.map((achievement) => (
-        <AchievementCard key={achievement.title} {...achievement} isDeleteBtnNeeded={true} />
-      ))}
-    </div>
+                {data?.data?.map((achievement: AchievementData) => (
+                    <AchievementCard key={achievement.title} {...achievement} isDeleteBtnNeeded={true} />
+                ))}
+            </div>
         </div>
     );
 };

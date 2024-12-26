@@ -1,36 +1,51 @@
 import Ripples from "react-ripples";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { useAddNewSkillMutation, useDeleteSkillMutation, useGetAllSkillsQuery } from "../../Redux/Features/Skills/skillApi";
 import { ICONS } from "../../assets";
 
+// Define types for skill data
+interface Skill {
+  _id: string;
+  skillName: string;
+  icon: string; // Assuming the icon is a URL string
+}
+
+// Define types for the form data
+interface FormData {
+  skillName: string;
+  image?: FileList;
+}
+
 const ProfessionalSkills = () => {
-  const {data} = useGetAllSkillsQuery({});
+  const { data } = useGetAllSkillsQuery({});
   const [addNewSkill] = useAddNewSkillMutation({});
   const [deleteSkill] = useDeleteSkillMutation({});
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormData>();
 
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<FormData> = (data) => {
     const formData = new FormData();
     const skillName = {
-      skillName:data.skillName
-    }
+      skillName: data.skillName,
+    };
     formData.append("data", JSON.stringify(skillName));
-    formData.append("file", uploadedImage);
-    
+    if (uploadedImage) {
+      formData.append("file", uploadedImage);
+    }
+
     toast.promise(
       addNewSkill(formData).unwrap(),
       {
@@ -46,7 +61,7 @@ const ProfessionalSkills = () => {
     );
   };
 
-  const handleDeleteSkill = (id) => {
+  const handleDeleteSkill = (id: string) => {
     toast.promise(
       deleteSkill(id).unwrap(),
       {
@@ -56,19 +71,19 @@ const ProfessionalSkills = () => {
         },
         error: (err) => {
           console.error('Error:', err);
+          return 'Failed to delete skill...';
         },
       }
     );
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    console.log(file);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
     if (file) {
       setUploadedImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(() => [reader.result]);
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -116,7 +131,7 @@ const ProfessionalSkills = () => {
           {uploadedImage ? (
             <div className="relative size-20">
               <img
-                src={imagePreview}
+                src={imagePreview as string}
                 alt="Service Icon"
                 className="w-full h-full rounded-lg object-cover"
               />
@@ -152,7 +167,7 @@ const ProfessionalSkills = () => {
             </div>
           )}
 
-          <Ripples during={1500}>
+          <Ripples during={1500} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
             <button
               type="submit"
               className="w-full md:w-[190px] bg-gradient-to-br from-blue-500 to-indigo-800 font-Poppins py-3 px-5 text-xs sm:text-base text-white rounded sm:rounded-[7px] flex justify-center items-center"
@@ -168,28 +183,24 @@ const ProfessionalSkills = () => {
           isFormVisible && "mt-8"
         }`}
       >
-        {data?.data?.map((skill, index) => (
-        <div
-          key={index}
-          className="w-full md:size-[230px] bg-[#0E1330] border border-[#282D45] rounded-[20px] flex flex-col justify-center items-center gap-7 relative group overflow-hidden"
-        >
-          <img className="absolute right-0 top-0" src={ICONS.ellipse1} alt="" />
+        {data?.data?.map((skill: Skill, index: number) => (
+          <div
+            key={index}
+            className="w-full md:size-[230px] bg-[#0E1330] border border-[#282D45] rounded-[20px] flex flex-col justify-center items-center gap-7 relative group overflow-hidden"
+          >
+            <img className="absolute right-0 top-0" src={ICONS.ellipse1} alt="" />
+            <img className="absolute left-0 bottom-0" src={ICONS.ellipse2} alt="" />
+            <img src={skill?.icon} alt="" className="size-28" />
+            <h1 className="text-white font-Poppins text-2xl font-semibold text-center">
+              {skill.skillName}
+            </h1>
 
-          <img className="absolute left-0 bottom-0" src={ICONS.ellipse2} alt="" />
-          <img src={skill?.icon} alt="" className="size-28" />
-          <h1 className="text-white font-Poppins text-2xl font-semibold text-center">
-            {skill.skillName}
-          </h1>
-
-          <div onClick={() => handleDeleteSkill(skill?._id)} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <div onClick={() => handleDeleteSkill(skill?._id)} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
               <MdDelete className="text-[#aeb9e1] cursor-pointer" size={24} />
             </div>
-        </div>
-      ))}
+          </div>
+        ))}
       </div>
-
-      
-      
     </div>
   );
 };

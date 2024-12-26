@@ -14,27 +14,27 @@ const Sidebar = () => {
     const dashboardSidebarLinks = [
         {
             label: "Dashboard",
-            path: "/",
+            path: "/dashboard/my-dashboard",
             icon: <LuLayoutDashboard className="text-[#aeb9e1] text-xl" />,
         },
-        {
-            label: "About Me",
-            path: "/about-me",
-            icon: <FaRegUser className="text-[#aeb9e1] text-xl" />,
-        },
+        // {
+        //     label: "About Me",
+        //     path: "/dashboard/about-me",
+        //     icon: <FaRegUser className="text-[#aeb9e1] text-xl" />,
+        // },
         {
             label: "Projects",
-            path: "/projects",
+            path: "/dashboard/projects",
             icon: <FaRegFileAlt className="text-[#aeb9e1] text-xl" />,
         },
         {
             label: "My Services",
-            path: "/my-services",
+            path: "/dashboard/my-services",
             icon: <RiServiceLine className="text-[#aeb9e1] text-xl" />,
         },
         {
             label: "Endorsements",
-            path: "/endorsements",
+            path: "/dashboard/endorsements",
             icon: <BsFillPersonCheckFill className="text-[#aeb9e1] text-xl" />,
         },
     ];
@@ -100,14 +100,14 @@ const Sidebar = () => {
 
                     {isDropdownOpen && (
                         <ul className="bg-[#1C2242] mx-3 border border-[#282D45] rounded-md p-[8px] flex flex-col gap-6 text-[1rem] text-white">
-                            <Link to={`/professional-skills`} className="flex items-center gap-3 text-sm">
+                            <Link to={`/dashboard/professional-skills`} className="flex items-center gap-3 text-sm">
                                 <FaClipboardList
                                     className={`transition-transform duration-300`}
                                     style={{ color: "#aeb9e1" }}
                                 />
                                 <span style={{ color: "#aeb9e1" }}>Professional Skill</span>
                             </Link>
-                            <Link to={`/achievements`} className="flex items-center gap-3 text-sm">
+                            <Link to={`/dashboard/achievements`} className="flex items-center gap-3 text-sm">
                                 <FaAward
                                     className={`transition-transform duration-300`}
                                     style={{ color: "#aeb9e1" }}

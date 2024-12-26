@@ -1,30 +1,43 @@
-import PropTypes from "prop-types";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import Ripples from "react-ripples";
 import { toast } from "sonner";
 import { useAddNewServiceMutation } from "../../Redux/Features/MyServices/myServicesApi";
 import { ICONS } from "../../assets";
 
-const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
+// Define the types for the form data
+interface ServiceFormData {
+  name: string;
+  description: string;
+  image?: FileList;
+}
+
+interface AddNewServiceProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (open: boolean) => void;
+}
+
+const AddNewService = ({ isModalOpen, setIsModalOpen }: AddNewServiceProps) => {
   const [addNewService] = useAddNewServiceMutation();
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
-  } = useForm();
+    reset,
+  } = useForm<ServiceFormData>(); // Use the form data type here
 
-  const handleAddNewAchievement = (data) => {
+  // Define the function to handle form submission
+  const handleAddNewService: SubmitHandler<ServiceFormData> = (data) => {
     const formData = new FormData();
     const serviceData = {
       name: data.name,
       description: data.description,
-    }
+    };
     formData.append("data", JSON.stringify(serviceData));
-    formData.append("file", uploadedImage);
+    if (uploadedImage) formData.append("file", uploadedImage);
 
     toast.promise(
       addNewService(formData).unwrap(),
@@ -44,13 +57,13 @@ const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
     );
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       setUploadedImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(() => [reader.result]);
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -58,22 +71,18 @@ const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
 
   const handleImageRemove = () => {
     setUploadedImage(null);
+    setImagePreview(null);
   };
-
 
   return (
     <div
       onClick={() => setIsModalOpen(false)}
-      className={`fixed z-[100] flex items-center justify-center ${isModalOpen ? "opacity-1 visible" : "invisible opacity-0"
-        } inset-0 h-full w-full mx-auto backdrop-blur-sm duration-100 `}
+      className={`fixed z-[100] flex items-center justify-center ${isModalOpen ? "opacity-1 visible" : "invisible opacity-0"} inset-0 h-full w-full mx-auto backdrop-blur-sm duration-100 `}
     >
       <div
         onClick={(e_) => e_.stopPropagation()}
         style={{ overflowY: "auto", scrollbarWidth: "thin" }}
-        className={`absolute w-[600px] h-[460px] bg-[#0E1330] p-5 border border-[#282D45] rounded-xl text-white drop-shadow-2xl ${isModalOpen
-          ? "opacity-1 translate-y-0 duration-300"
-          : "-translate-y-20 opacity-0 duration-150"
-          }`}
+        className={`absolute w-[600px] h-[460px] bg-[#0E1330] p-5 border border-[#282D45] rounded-xl text-white drop-shadow-2xl ${isModalOpen ? "opacity-1 translate-y-0 duration-300" : "-translate-y-20 opacity-0 duration-150"}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#282D45] pb-3">
@@ -91,23 +100,19 @@ const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
         {/* Form */}
         <form
           className="w-full flex flex-col gap-7 mt-7"
-          onSubmit={handleSubmit(handleAddNewAchievement)}
+          onSubmit={handleSubmit(handleAddNewService)} // Handle form submission
         >
           <input
             {...register("name", { required: "Name is required" })}
             placeholder="Enter Service Name*"
             type="text"
-            className={`outline-none bg-[#0E1330] border ${errors.name ? "border-red-500" : "border-[#282D45]"
-              } rounded-[10px] py-3 px-5 w-full text-white focus:border-[0.2px] focus:border-[#0696E7]/50 transition duration-300`}
+            className={`outline-none bg-[#0E1330] border ${errors.name ? "border-red-500" : "border-[#282D45]"} rounded-[10px] py-3 px-5 w-full text-white focus:border-[0.2px] focus:border-[#0696E7]/50 transition duration-300`}
           />
 
           <textarea
-            {...register("description", {
-              required: "Description is required",
-            })}
+            {...register("description", { required: "Description is required" })}
             placeholder="Enter Description*"
-            className={`outline-none bg-[#0E1330] border ${errors.description ? "border-red-500" : "border-[#282D45]"
-              } rounded-[10px] py-3 px-5 w-full text-white h-[150px] focus:border-[0.2px] focus:border-[#0696E7]/50 transition duration-300`}
+            className={`outline-none bg-[#0E1330] border ${errors.description ? "border-red-500" : "border-[#282D45]"} rounded-[10px] py-3 px-5 w-full text-white h-[150px] focus:border-[0.2px] focus:border-[#0696E7]/50 transition duration-300`}
           ></textarea>
 
           <div className="flex items-center justify-between">
@@ -115,7 +120,7 @@ const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
             {uploadedImage ? (
               <div className="relative size-20">
                 <img
-                  src={imagePreview}
+                  src={imagePreview as string}
                   alt="Service Icon"
                   className="w-full h-full rounded-lg object-cover"
                 />
@@ -137,9 +142,7 @@ const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
                     <img src={ICONS.photo} width={25} height={25} alt="photo-icon" />
                     Upload Service Icon
                   </div>
-                  <p className="text-xs text-[#ACACAC]">
-                    Please upload Service Icon
-                  </p>
+                  <p className="text-xs text-[#ACACAC]">Please upload Service Icon</p>
                 </label>
                 <input
                   {...register("image")}
@@ -164,11 +167,6 @@ const AddNewService = ({ isModalOpen, setIsModalOpen }) => {
       </div>
     </div>
   );
-};
-
-AddNewService.propTypes = {
-  isModalOpen: PropTypes.bool.isRequired,
-  setIsModalOpen: PropTypes.func.isRequired,
 };
 
 export default AddNewService;

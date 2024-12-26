@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState } from 'react';
 import Ripples from 'react-ripples';
@@ -22,10 +23,10 @@ const Projects = () => {
     ];
 
     const personalProjects = data?.data?.filter(
-        (project) => project.projectType === "Personal"
+        (project:any) => project.projectType === "Personal"
     );
     const companyProjects = data?.data?.filter(
-        (project) => project.projectType === "Company"
+        (project:any) => project.projectType === "Company"
     );
     return (
         <div>
@@ -48,7 +49,7 @@ const Projects = () => {
                         )
                     }
                     <Ripples placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                        <Link to={"/add-new-project"}
+                        <Link to={"/dashboard/add-new-project"}
                             className="bg-[#1C2242] border border-[#282D45] p-3 rounded-lg text-[#aeb9e1]">
                             Add New Project
                         </Link>
@@ -58,7 +59,7 @@ const Projects = () => {
 
             {activeTab === "Personal Projects" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mt-12">
-                    {personalProjects?.map((project) => (
+                    {personalProjects?.map((project:any) => (
                         <ProjectCard key={project?._id} project={project} />
                     ))}
                 </div>
@@ -66,7 +67,7 @@ const Projects = () => {
 
             {activeTab === "Company Projects" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mt-12">
-                    {companyProjects?.map((project) => (
+                    {companyProjects?.map((project:any) => (
                         <ProjectCard key={project?._id} project={project} />
                     ))}
                 </div>
