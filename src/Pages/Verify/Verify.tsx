@@ -1,15 +1,22 @@
 import Ripples from "react-ripples";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { ICONS } from "../../assets";
+import { useLoginMutation } from "../../Redux/Features/Auth/authApi";
+import { setToken } from "../../Redux/Features/Auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 interface FormValues {
   pin: string;
 }
 
 const Verify: React.FC = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch } = useForm<FormValues>();
   const [pin, setPin] = useState<string>("");
+  const [verifyPin, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const handleNumberClick = (number: string): void => {
     if (pin.length < 5) {
@@ -19,8 +26,16 @@ const Verify: React.FC = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("Submitted PIN:", data.pin);
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log(data.pin);
+    try {
+      const response = await verifyPin({ pin: data.pin }).unwrap();
+      console.log(response);
+      dispatch(setToken(response.token));
+      navigate("/dashboard/my-dashboard");
+    } catch (error) {
+      console.error("Verification failed:", error);
+    }
   };
 
   const resetPin = (): void => {
@@ -90,6 +105,7 @@ const Verify: React.FC = () => {
             <button
               type="submit"
               className="bg-gradient-to-br from-blue-500 to-indigo-800 border border-[#282D45] w-14 h-14 flex justify-center items-center rounded-lg"
+              disabled={isLoading}
             >
               <img className="size-4" src={ICONS.rightArrow} alt="Submit" />
             </button>

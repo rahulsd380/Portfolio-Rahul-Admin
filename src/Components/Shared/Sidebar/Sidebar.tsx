@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { FaChevronDown, FaRegFileAlt, FaRegUser } from "react-icons/fa";
+import { FaChevronDown, FaRegFileAlt } from "react-icons/fa";
 import { FaAward } from "react-icons/fa";
 import { FaClipboardList } from "react-icons/fa";
 import { LuLayoutDashboard } from "react-icons/lu";
