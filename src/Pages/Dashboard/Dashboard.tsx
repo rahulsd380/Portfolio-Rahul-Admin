@@ -1,27 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FaAward, FaClipboardList, FaRegFileAlt, FaUser } from "react-icons/fa";
 import { ICONS } from "../../assets";
 import { LuArrowUpRight } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { FaBuildingColumns } from "react-icons/fa6";
+import { useGetAllAchievementQuery } from "../../Redux/Features/Achievements/achievementsApi";
+import { useGetAllEndorsementsQuery } from "../../Redux/Features/Endorsements/endorsementsApi";
+import { useGetAllProjectsQuery } from "../../Redux/Features/Projects/projectApi";
+import { useGetAllSkillsQuery } from "../../Redux/Features/Skills/skillApi";
 
 
 const Dashboard = () => {
+    const {data:achievements} = useGetAllAchievementQuery({});
+    const { data:endorsements } = useGetAllEndorsementsQuery({});
+    const { data:projects } = useGetAllProjectsQuery({});
+    const { data:skills } = useGetAllSkillsQuery({});
+
+    const personalProjects = projects?.data?.filter(
+        (project:any) => project.projectType === "Personal"
+    );
+    const companyProjects = projects?.data?.filter(
+        (project:any) => project.projectType === "Company"
+    );
     const statusCardsInfo = [
         {
             title: "Total Projects",
-            value: 30,
+            value: projects?.data?.length || 0,
             icon: <FaRegFileAlt className="text-[#AEB9E1] text-xl" />,
             path : "/projects"
         },
         {
             title: "Personal Projects",
-            value: 30,
+            value: personalProjects?.length || 0,
             icon: <FaUser className="text-[#AEB9E1] text-xl" />,
             path : "/projects"
         },
         {
             title: "Company Projects",
-            value: 30,
+            value: companyProjects?.length || 0,
             icon: <FaBuildingColumns className="text-[#AEB9E1] text-xl" />,
             path : "/projects"
         },
@@ -32,19 +48,19 @@ const Dashboard = () => {
         // },
         {
             title: "Professional Skills",
-            value: 10,
+            value: skills?.data?.length || 0,
             icon: <FaClipboardList className="text-[#AEB9E1] text-xl" />,
             path : "/professional-skills"
         },
         {
             title: "Achievements",
-            value: 7,
+            value: achievements?.data?.length || 0,
             icon: <FaAward className="text-[#AEB9E1] text-xl" />,
             path : "/achievements"
         },
         {
             title: "Total Endorsements",
-            value: 7,
+            value: endorsements?.data?.length || 0,
             icon: <FaAward className="text-[#AEB9E1] text-xl" />,
             path : "/endorsements"
         },
@@ -70,7 +86,7 @@ const Dashboard = () => {
                             </Link>
                         </div>
                         <h1 className="text-white font-Poppins text-3xl font-semibold">
-                            {info?.value}+
+                            {info?.value}
                         </h1>
                     </div>
                 ))
