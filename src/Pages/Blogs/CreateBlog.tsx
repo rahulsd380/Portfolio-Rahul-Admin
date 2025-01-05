@@ -87,7 +87,7 @@ console.log(content);
                 <div className="flex-1">
                     <label className="text-white mb-2 block">Author Name*</label>
                     <input
-                        {...register("title", { required: "Blog Title is required" })}
+                        {...register("author", { required: "Author name is required" })}
                         placeholder="Enter author name"
                         type="text"
                         className={`outline-none bg-[#0E1330] border ${errors.name ? "border-red-500" : "border-[#282D45]"} rounded-[10px] py-3 px-5 w-full text-white focus:border-[#0696E7]/50 transition duration-300`}
@@ -108,7 +108,7 @@ console.log(content);
 
                 {/* Blog Image */}
                 <div className="flex-1">
-                    <label htmlFor="file" className="text-white mb-2 block">Upload Technology Logos</label>
+                    <label htmlFor="file" className="text-white mb-2 block">Upload Blog Image</label>
                     <input
                         id="file"
                         type="file"
