@@ -11,18 +11,18 @@ type FilePreview = string; // Base64 string or data URL
 
 // Type for form data
 interface ProjectData {
-  name: string;
-  tagline: string;
-  overview: string;
-  duration: string;
-  features: string[];
-  frontendRepo: string;
-  backendRepo: string;
-  liveLink: string;
-  overviewVideo: string;
-  technologyNames: string[];
-  category: string;
-  projectType: string;
+    name: string;
+    tagline: string;
+    overview: string;
+    duration: string;
+    features: string[];
+    frontendRepo: string;
+    backendRepo: string;
+    liveLink: string;
+    overviewVideo: string;
+    technologyNames: string[];
+    category: string;
+    projectType: string;
 }
 
 
@@ -30,114 +30,114 @@ const AddNewProject = () => {
     const [addNewProject, { isLoading }] = useAddNewProjectMutation();
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
     const [imageFiles, setImageFiles] = useState<File[]>([]);
-const [imagePreviews, setImagePreviews] = useState<FilePreview[]>([]);
-const [logoFiles, setLogoFiles] = useState<File[]>([]);
-const [logoPreviews, setLogoPreviews] = useState<FilePreview[]>([]);
-const [features, setFeatures] = useState<string[]>([]);
-const [technologyNames, setTechnologyNames] = useState<string[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<FilePreview[]>([]);
+    const [logoFiles, setLogoFiles] = useState<File[]>([]);
+    const [logoPreviews, setLogoPreviews] = useState<FilePreview[]>([]);
+    const [features, setFeatures] = useState<string[]>([]);
+    const [technologyNames, setTechnologyNames] = useState<string[]>([]);
 
 
 
-const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-        e.preventDefault();
-        const newTag = e.currentTarget.value.trim();
-        if (!features.includes(newTag)) {
-            setFeatures((prev) => [...prev, newTag]);
-            setValue("features", [...features, newTag]);
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+            e.preventDefault();
+            const newTag = e.currentTarget.value.trim();
+            if (!features.includes(newTag)) {
+                setFeatures((prev) => [...prev, newTag]);
+                setValue("features", [...features, newTag]);
+            }
+            e.currentTarget.value = "";
         }
-        e.currentTarget.value = "";
-    }
-};
-
-const removeTag = (index: number): void => {
-    const newFeatures = features.filter((_, i) => i !== index);
-    setFeatures(newFeatures);
-    setValue("features", newFeatures);
-};
-
-const handleAddTechnologyName = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-        e.preventDefault();
-        const newName = e.currentTarget.value.trim();
-        if (!technologyNames.includes(newName)) {
-            setTechnologyNames((prev) => [...prev, newName]);
-            setValue("technologyNames", [...technologyNames, newName]);
-        }
-        e.currentTarget.value = "";
-    }
-};
-
-const handleRemoveTechnologyName = (index: number): void => {
-    const newNames = technologyNames.filter((_, i) => i !== index);
-    setTechnologyNames(newNames);
-    setValue("technologyNames", newNames);
-};
-
-const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-        setImageFiles((prev) => [...prev, file]);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImagePreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-    }
-};
-
-const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target.files?.[0];
-    if (file) {
-        setLogoFiles((prev) => [...prev, file]);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setLogoPreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-    }
-};
-
-const handleCreateProject = async (data: Record<string, any>): Promise<void> => {
-    const formData = new FormData();
-
-    const projectData: ProjectData = {
-        name: data.name,
-        tagline: data.tagline,
-        overview: data.overview,
-        duration: data.duration,
-        features: features || [],
-        frontendRepo: data.frontendRepo,
-        backendRepo: data.backendRepo,
-        liveLink: data.liveLink,
-        overviewVideo: data.overviewVideo,
-        technologyNames: technologyNames,
-        category: data.category,
-        projectType: data.projectType,
     };
 
-    formData.append("data", JSON.stringify(projectData));
+    const removeTag = (index: number): void => {
+        const newFeatures = features.filter((_, i) => i !== index);
+        setFeatures(newFeatures);
+        setValue("features", newFeatures);
+    };
 
-    imageFiles.forEach((image) => formData.append("images", image));
-    logoFiles.forEach((logo) => formData.append("logos", logo));
-
-    try {
-        const response = await addNewProject(formData).unwrap();
-        console.log(response);
-        if (response.success) {
-            toast.success("Project added successfully.");
-            reset();
-            setLogoFiles([]);
-            setImageFiles([]);
+    const handleAddTechnologyName = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+            e.preventDefault();
+            const newName = e.currentTarget.value.trim();
+            if (!technologyNames.includes(newName)) {
+                setTechnologyNames((prev) => [...prev, newName]);
+                setValue("technologyNames", [...technologyNames, newName]);
+            }
+            e.currentTarget.value = "";
         }
-    } catch (err) {
-        console.error(err);
-        return;
-    }
-};
+    };
+
+    const handleRemoveTechnologyName = (index: number): void => {
+        const newNames = technologyNames.filter((_, i) => i !== index);
+        setTechnologyNames(newNames);
+        setValue("technologyNames", newNames);
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            setImageFiles((prev) => [...prev, file]);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreviews((prev) => [...prev, reader.result as string]);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setLogoFiles((prev) => [...prev, file]);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setLogoPreviews((prev) => [...prev, reader.result as string]);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleCreateProject = async (data: Record<string, any>): Promise<void> => {
+        const formData = new FormData();
+
+        const projectData: ProjectData = {
+            name: data.name,
+            tagline: data.tagline,
+            overview: data.overview,
+            duration: data.duration,
+            features: features || [],
+            frontendRepo: data.frontendRepo,
+            backendRepo: data.backendRepo,
+            liveLink: data.liveLink,
+            overviewVideo: data.overviewVideo,
+            technologyNames: technologyNames,
+            category: data.category,
+            projectType: data.projectType,
+        };
+
+        formData.append("data", JSON.stringify(projectData));
+
+        imageFiles.forEach((image) => formData.append("images", image));
+        logoFiles.forEach((logo) => formData.append("logos", logo));
+
+        try {
+            const response = await addNewProject(formData).unwrap();
+            console.log(response);
+            if (response.success) {
+                toast.success("Project added successfully.");
+                reset();
+                setLogoFiles([]);
+                setImageFiles([]);
+            }
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+    };
 
 
     return (
