@@ -10,6 +10,8 @@ import Achievements from "../Pages/Achievements/Achievements";
 import AddNewProject from "../Pages/Projects/AddNewProject";
 import AuthLayout from "../Layout/AuthLayout";
 import Verify from "../Pages/Verify/Verify";
+import Blogs from "../Pages/Blogs/Blogs";
+import CreateBlog from "../Pages/Blogs/CreateBlog";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
       {
         path: "achievements",
         element: <Achievements />,
+      },
+      {
+        path: "blogs",
+        element: <Blogs />,
+      },
+      {
+        path: "create-blog",
+        element: <CreateBlog />,
       },
     ],
   },

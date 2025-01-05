@@ -195,14 +195,14 @@ const Sidebar = () => {
                                     className={`transition-transform duration-300`}
                                     style={{ color: "#aeb9e1" }}
                                 />
-                                <span style={{ color: "#aeb9e1" }}>All Blogs</span>
+                                <Link to={"/dashboard/blogs"} style={{ color: "#aeb9e1" }}>All Blogs</Link>
                             </li>
                             <li className="flex items-center gap-3 text-sm">
                                 <MdAdd
                                     className={`transition-transform duration-300`}
                                     style={{ color: "#aeb9e1" }}
                                 />
-                                <span style={{ color: "#aeb9e1" }}>Add New Blog</span>
+                                <Link to={"/dashboard/create-blog"} style={{ color: "#aeb9e1" }}>Create New Blog</Link>
                             </li>
                         </ul>
                     )}
